@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/api_helpers.dart';
 import 'package:news_app/image_item_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,15 +20,41 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('News App', style: Theme.of(context).textTheme.bodyLarge),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return ImageItemWidget(
-            image: dummyImage,
-            title: "Dynamic Title $index",
-            onTap: () {},
+      body: FutureBuilder(
+        future: ApiHelpers().getArticles(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                "Error fetching articles",
+                style: TextStyle(color: Colors.white, fontSize: 32),
+              ),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data?.articles == null) {
+            return const Center(
+              child: Text(
+                "No articles found",
+                style: TextStyle(color: Colors.white, fontSize: 32),
+              ),
+            );
+          }
+
+          var snapshotData = snapshot.data?.articles;
+
+          return ListView.builder(
+            itemCount: snapshotData?.length,
+            itemBuilder: (context, index) => ImageItemWidget(
+              image: snapshotData?[index].urlToImage ?? dummyImage,
+              title: snapshotData?[index].title ?? '',
+            ),
           );
         },
-        itemCount: 30,
       ),
     );
   }
