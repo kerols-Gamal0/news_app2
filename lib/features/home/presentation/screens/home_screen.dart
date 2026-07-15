@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/api_helpers.dart';
-import 'package:news_app/article_details_screen.dart';
-import 'package:news_app/image_item_widget.dart';
+import 'package:news_app/core/routes/routes.dart';
+import 'package:news_app/features/home/data/api/api_helpers.dart';
+import 'package:news_app/features/home/presentation/widgets/image_item_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,16 +71,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 image: articleImage,
                 title: articleTitle,
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => ArticleDetailsScreen(
-                        image: articleImage,
-                        title: articleTitle,
-                        content: articleContent,
-                        author: articleAuthor,
-                      ),
-                    ),
+                    Routes.articleDetails,
+                    arguments: {
+                      'image': articleImage,
+                      'title': articleTitle,
+                      'content': articleContent,
+                      'author': articleAuthor,
+                    },
                   );
                 },
               );

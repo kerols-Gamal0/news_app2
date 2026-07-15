@@ -31,13 +31,6 @@ class ImageItemWidget extends StatelessWidget {
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
-
-              // Image.network(
-              //   image,
-              //   width: double.infinity,
-              //   height: 200,
-              //   fit: BoxFit.cover,
-              // ),
             ),
 
             //! title
