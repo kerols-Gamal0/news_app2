@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/api_helpers.dart';
+import 'package:news_app/article_details_screen.dart';
 import 'package:news_app/image_item_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +18,14 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Color(0xff202020),
       appBar: AppBar(
         backgroundColor: Color(0xff1877F2),
-        title: Text('News App', style: Theme.of(context).textTheme.bodyLarge),
+        title: Text(
+          'News App',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
         centerTitle: true,
       ),
       body: FutureBuilder(
@@ -49,10 +57,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return ListView.builder(
             itemCount: snapshotData?.length,
-            itemBuilder: (context, index) => ImageItemWidget(
-              image: snapshotData?[index].urlToImage ?? dummyImage,
-              title: snapshotData?[index].title ?? '',
-            ),
+            itemBuilder: (context, index) {
+              final article = snapshotData?[index];
+              final String articleImage = article?.urlToImage ?? dummyImage;
+              final String articleTitle = article?.title ?? '';
+              final String articleContent =
+                  article?.description ??
+                  article?.content ??
+                  'No content available';
+              final String? articleAuthor = article?.author;
+
+              return ImageItemWidget(
+                image: articleImage,
+                title: articleTitle,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ArticleDetailsScreen(
+                        image: articleImage,
+                        title: articleTitle,
+                        content: articleContent,
+                        author: articleAuthor,
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           );
         },
       ),
