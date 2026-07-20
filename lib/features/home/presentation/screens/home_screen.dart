@@ -5,6 +5,8 @@ import 'package:news_app/core/base_state/base_state_builder.dart';
 import 'package:news_app/features/home/data/models/models.dart';
 import 'package:news_app/features/home/presentation/widgets/image_item_widget.dart';
 import 'package:news_app/features/home/presentation_model/news_cubit.dart';
+import 'package:news_app/features/home/repo/data_source/home_data_source_implementation.dart';
+import 'package:news_app/features/home/repo/repo/home_repo_implementatoin.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,7 +15,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NewsCubit()..fetchNews(),
+      create: (context) => NewsCubit(
+            HomeRepoImplementation(HomeDataSourceImplementation()),
+          )..fetchNews(),
       child: Scaffold(
         backgroundColor: const Color(0xff202020),
         appBar: AppBar(
